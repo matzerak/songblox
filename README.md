@@ -1,6 +1,7 @@
 Link zur Webanwendung: https://matzerak.github.io/songblox/
 
-Link zu einer DEMO: [songblox "mit Bury It"](https://matzerak.github.io/songblox/#analysis=eyJ2ZXJzaW9uIjoxLCJ2aWRlb1VybCI6Imh0dHBzOi8veW91dHUuYmUvWDcxNUV1bVRHbzgiLCJkdXJhdGlvbiI6MTkxLjIxMzUsInRyYWNrcyI6W3sibmFtZSI6IkludHJvL091dHJvIiwiY29sb3IiOiIjZDhmMzZhIn0seyJuYW1lIjoiU3Ryb3BoZSIsImNvbG9yIjoiI2ZmOTg2YiJ9LHsibmFtZSI6IlByZS1DaG9ydXMiLCJjb2xvciI6IiM4YWI2ZmYifSx7Im5hbWUiOiJDaG9ydXMiLCJjb2xvciI6IiNlZTlmY2UifSx7Im5hbWUiOiJCcmlkZ2UiLCJjb2xvciI6IiM3NWQ1YmQifSx7Im5hbWUiOiJBbmFseXNlYmVyZWljaCIsImNvbG9yIjoiI2YzYzc2YSJ9XSwic2VnbWVudHMiOlt7Im5hbWUiOiJJbnRybyIsInN0YXJ0IjoxLCJlbmQiOjExLCJ0cmFjayI6MH0seyJuYW1lIjoiU3Ryb3BoZSAxIiwic3RhcnQiOjMwLCJlbmQiOjQ5LCJ0cmFjayI6Mn0seyJuYW1lIjoiSW50cm8vT3V0cm8iLCJzdGFydCI6MTAuOTI0ODE3MzcwNTE3NTc4LCJlbmQiOjI5LjkyNDgxNzM3MDUxNzU4LCJ0cmFjayI6MX0seyJuYW1lIjoiUHJlLUNob3J1cyIsInN0YXJ0Ijo0OC40NjA3NTQyODg3MjUyMiwiZW5kIjo1OS40NjA3NTQyODg3MjUyMSwidHJhY2siOjN9LHsibmFtZSI6IkludHJvL091dHJvIiwic3RhcnQiOjU5LCJlbmQiOjY5LCJ0cmFjayI6MH0seyJuYW1lIjoiSW50cm8vT3V0cm8iLCJzdGFydCI6NjguMzM0NDE2NzI2NTIwNzYsImVuZCI6ODcuMzM0NDE2NzI2NTIwNzYsInRyYWNrIjoxfSx7Im5hbWUiOiJTdHJvcGhlIiwic3RhcnQiOjg3LjQxMDExMDA2MTUwMTU4LCJlbmQiOjEwNy40MTAxMTAwNjE1MDE1OCwidHJhY2siOjJ9LHsibmFtZSI6IlN0cm9waGUiLCJzdGFydCI6MTA3Ljc1NTE5NDc1MDI4MTEzLCJlbmQiOjEyNS43NTUxOTQ3NTAyODExMywidHJhY2siOjN9LHsibmFtZSI6IlN0cm9waGUiLCJzdGFydCI6MTI1Ljg5MTA5MDUyMjMwOTk0LCJlbmQiOjEzNS44OTEwOTA1MjIzMDk5MiwidHJhY2siOjB9LHsibmFtZSI6IlN0cm9waGUiLCJzdGFydCI6MTM1LjU2MTY5NzQ4NjIxNzMsImVuZCI6MTU0LjU2MTY5NzQ4NjIxNzMsInRyYWNrIjoxfSx7Im5hbWUiOiJDaG9ydXMiLCJzdGFydCI6MTU0LjY3NDI0NTkyMDIyMDQ3LCJlbmQiOjE3NC42NzQyNDU5MjAyMjA0NywidHJhY2siOjN9LHsibmFtZSI6IkNob3J1cyIsInN0YXJ0IjoxNzQuODEwNTEzOTg2ODUzMDQsImVuZCI6MTg3LjIxMzUsInRyYWNrIjowfSx7Im5hbWUiOiJBbmFseXNlYmVyZWljaCIsInN0YXJ0Ijo0MiwiZW5kIjo5OCwidHJhY2siOjV9XSwibmlja25hbWUiOiJNYXR0aGlhcyJ9)
+Link zu einer DEMO: [songblox mit "Bury It" von Chvrches](https://matzerak.github.io/songblox/#analysis=WzIsIlg3MTVFdW1UR284IiwxOTIsIk1hdHRoaWFzIixbWyJJbnRyby9PdXRybyIsIiNkOGYzNmEiXSxbIlN0cm9waGUiLCIjZmY5ODZiIl0sWyJQcmUtQ2hvcnVzIiwiIzhhYjZmZiJdLFsiQ2hvcnVzIiwiI2VlOWZjZSJdLFsiQnJpZGdlIiwiIzc1ZDViZCJdLFsiQW5hbHlzZWJlcmVpY2giLCIjZjNjNzZhIl1dLFtbIkludHJvIiwxLDExLDBdLFsiU3Ryb3BoZSAxIiwzMCw1MCwyXSxbIkludHJvL091dHJvIiwxMC45MjQ4MTczNzA1MTc1NzgsMjkuOTI0ODE3MzcwNTE3NTgsMV0sWyJQcmUtQ2hvcnVzIiw0OS40NjA3NTQyODg3MjUyMiw1OS40NjA3NTQyODg3MjUyMSwzXSxbIkludHJvL091dHJvIiw1OSw2OSwwXSxbIkludHJvL091dHJvIiw2OC4zMzQ0MTY3MjY1MjA3Niw4Ny4zMzQ0MTY3MjY1MjA3NiwxXSxbIlN0cm9waGUiLDg3LjQxMDExMDA2MTUwMTU4LDEwNy40MTAxMTAwNjE1MDE1OCwyXSxbIlN0cm9waGUiLDEwNi43NTUxOTQ3NTAyODExMywxMjUuNzU1MTk0NzUwMjgxMTMsM10sWyJTdHJvcGhlIiwxMjUuODkxMDkwNTIyMzA5OTQsMTM1Ljg5MTA5MDUyMjMwOTkyLDBdLFsiU3Ryb3BoZSIsMTM1LjU2MTY5NzQ4NjIxNzMsMTU0LjU2MTY5NzQ4NjIxNzMsMl0sWyJDaG9ydXMiLDE1NC42NzQyNDU5MjAyMjA0NywxNzQuNjc0MjQ1OTIwMjIwNDcsM10sWyJDaG9ydXMiLDE3NC44MTA1MTM5ODY4NTMwNCwxODcuMjEzNSwwXSxbIkFuYWx5c2ViZXJlaWNoIiw1OSwxMzYsNV1dXQ)
+
 
 
 ## Popsongs untersuchen – Ablaufstrukturen hörend erkunden 
@@ -9,7 +10,7 @@ Link zu einer DEMO: [songblox "mit Bury It"](https://matzerak.github.io/songblox
 
 ### Grundidee und didaktisches Anliegen
 
-Die Webanwendung **songblox** habe ich entwickelt, um die Untersuchung der Ablaufstruktur von Popsongs im Musikunterricht zu unterstützen. Schülerinnen und Schüler können damit eine interaktive Visualisierung der Songstruktur erstellen.
+Die Webanwendung *songblox* habe ich entwickelt, um die Untersuchung der Ablaufstruktur von Popsongs im Musikunterricht zu unterstützen. Schülerinnen und Schüler können damit eine interaktive Visualisierung der Songstruktur erstellen.
 
 ***songblox* ermöglicht es, musikalische Form als gestalteten zeitlichen Verlauf zu untersuchen.**
 
@@ -33,7 +34,7 @@ Die Analyse lässt sich auch **exportieren und über einen Link teilen**. Auf di
 
 ## Didaktische Überlegungen
 
-Mit songblox möchte ich Schülerinnen und Schüler dabei unterstützen, intuitive Höreindrücke an konkreten Stellen zu überprüfen. Ein Ausgangspunkt könnte die Beobachtung sein: „Der zweite Refrain wirkt viel voller als der erste.“ 
+Mit *songblox* möchte ich Schülerinnen und Schüler dabei unterstützen, intuitive Höreindrücke an konkreten Stellen zu überprüfen. Ein Ausgangspunkt könnte die Beobachtung sein: „Der zweite Refrain wirkt viel voller als der erste.“ 
 Im unmittelbaren Vergleich lässt sich untersuchen, welche musikalischen Merkmale zu diesem Eindruck beitragen könnten – etwa zusätzliche Instrumente, Verdopplungen, Dynamik, Register oder Klangschichtung. Die Formanalyse kann so zum Ausgangspunkt einer **funktionalen Musikanalyse** werden, die nach dem Zusammenhang zwischen musikalischer Gestaltung und wahrgenommener Wirkung fragt.
 
 Mein didaktisches Anliegen geht über die Zuordnung von Formbegriffen hinaus: **Musikalische Form soll als gestalteter zeitlicher Verlauf untersucht werden.** Was kehrt wieder? Was verändert sich? Wie werden Erwartungen aufgebaut? Welche Funktion erfüllt ein Abschnitt im gesamten Song? Wenn etablierte Formbegriffe für ein Musikstück wenig hilfreich sind, können auch andere Gliederungen erprobt und begründet werden.
@@ -46,15 +47,15 @@ Schon die Einteilung in Abschnitte ist eine analytische Entscheidung. Wo ein Abs
 
 Die dargestellte Ablaufstruktur wird damit als Ergebnis musikalischer Interpretation diskutierbar. Die Lernenden erkennen Abschnitte, vergleichen sie, beschreiben Unterschiede und deuten deren Bedeutung für den musikalischen Verlauf.
 
-Als ergänzenden Impuls zum Thema Songstrukturen verlinke ich das YouTubevideo Every Type of Song Structure Explained.
+Als ergänzenden Impuls zum Thema Songstrukturen verlinke ich das YouTubevideo [Every Type of Song Structure Explained](https://youtu.be/tbDb_if8jWI).
 
 ## Gestaltungsentscheidungen
 
-Bei der Entwicklung war mir eine übersichtliche und unmittelbar bedienbare Oberfläche wichtig. Ich habe songblox gezielt auf die Untersuchung der Ablaufstruktur von Popsongs ausgerichtet. Die Anwendung soll das **eigenständige, vergleichende und reflektierte Hören** unterstützen.
+Bei der Entwicklung war mir eine übersichtliche und unmittelbar bedienbare Oberfläche wichtig. Ich habe *songblox* gezielt auf die Untersuchung der Ablaufstruktur von Popsongs ausgerichtet. Die Anwendung soll das **eigenständige, vergleichende und reflektierte Hören** unterstützen.
 
-Die Schülerinnen und Schüler können mit **songblox** die Songs für ihre Analyse selbst auswählen und ihre Ergebnisse teilen, um Rückmeldungen einzuholen und unterschiedliche Deutungen zu besprechen.
+Die Schülerinnen und Schüler können mit *songblox* die Songs für ihre Analyse selbst auswählen und ihre Ergebnisse teilen, um Rückmeldungen einzuholen und unterschiedliche Deutungen zu besprechen.
 
-Die Bedienung ist auf **Touch** ausgelegt; die zentralen Analysefunktionen lassen sich ohne Tastatur nutzen. Beim Wechsel im Matrixeditor wird die Musikwiedergabe automatisch angehalten.
+Die Bedienung ist auf **Touch auf Tablet und Smartboard** ausgelegt; die zentralen Analysefunktionen lassen sich ohne Tastatur nutzen. Beim Wechsel im Matrixeditor wird die Musikwiedergabe automatisch angehalten.
 
 Eine weitere bewusste Entscheidung betrifft die Möglichkeit, das **Video auch ausblenden** zu können, um die Aufmerksamkeit auf unterschiedliche Ebenen des musikalischen Geschehen und die hörbaren Unterschiede zwischen Abschnitten zu richten.
 
@@ -65,7 +66,7 @@ Außerdem lässt sich die **Schriftgröße vergrößern**, um die Lesbarkeit ins
 ## Kurzanleitung
 
 1. **Videolink kopieren:** Öffne ein Popsong-Video auf YouTube. Wähle unter dem Video **Teilen** und anschließend **Kopieren**.
-2. **Video laden:** Wechsle zu songblox. Wähle **Hier klicken, um Videolink einzufügen**, anschließend **Einfügen** und dann **Video laden**.
+2. **Video laden:** Wechsle zu *songblox*. Wähle **Hier klicken, um Videolink einzufügen**, anschließend **Einfügen** und dann **Video laden**.
 3. **Abschnitte anlegen und bearbeiten:** Füge im Arbeitsbereich über **+ Abschnitt am Abspielkopf** einen Abschnitt an der aktuellen Wiedergabeposition hinzu. Ordne ihn einer Kategorie zu. Durch Antippen bzw. Anklicken und Ziehen kannst du seine Zuordnung, Position und Länge verändern.
 4. **Abschnitte vergleichen:** Tippe oder klicke in der Gesamtübersicht auf einen Block, um die Wiedergabe an der entsprechenden Stelle zu starten. Wechsle zwischen den Blöcken, um Abschnitte direkt miteinander zu vergleichen.
 5. **Abschnitte löschen:** Lösche nicht benötigte Abschnitte in der Tabelle unterhalb des Matrixeditors.
