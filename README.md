@@ -150,5 +150,5 @@ Ich freue mich über Erfahrungsberichte aus dem Unterricht, Hinweise auf Fehler 
 
 
 
-![songblox2](/Users/matthiaskrebs/hermes-workspace/songblox2.jpg)
+![songblox2](./songblox2.jpg)
 
