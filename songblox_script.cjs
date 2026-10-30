@@ -30,17 +30,58 @@ test('resize enforces a minimum one-second segment', () => {
   assert.deepEqual({...update({start: 20, end: 40}, 'end', -50, 100)}, {start: 20, end: 21});
 });
 test('share state round-trips video and Unicode analysis names', () => {
-  const encode = load('encodeAnalysisState', 'decodeAnalysisState');
+  const getYouTubeVideoId = load('getYouTubeVideoId', 'updateLoadVideoState');
+  const encode = load('encodeAnalysisState', 'decodeAnalysisState', {getYouTubeVideoId});
   const decode = load('decodeAnalysisState', 'toast');
   const state = {version: 1, videoUrl: 'https://youtu.be/_t9t0kZRJ54', duration: 222,
     tracks: [{name: 'Rhythmus 🎵', color: '#ff986b'}], nickname: 'Mia',
     segments: [{name: 'Überleitung', start: 10, end: 30, track: 0}]};
   assert.deepEqual(JSON.parse(JSON.stringify(decode(encode(state)))), state);
+  const legacyLength = Buffer.from(JSON.stringify(state), 'utf8').toString('base64url').length;
+  assert.ok(encode(state).length < legacyLength);
 });
 test('invalid shared state is rejected', () => {
   const decode = load('decodeAnalysisState', 'toast');
   assert.equal(decode('not-valid-base64!'), null);
   assert.equal(decode('e30'), null);
+  const legacy = {version: 1, videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', duration: 200,
+    tracks: [{name: 'Strophe', color: '#fff'}], segments: [], nickname: 'Alt'};
+  const encoded = Buffer.from(JSON.stringify(legacy), 'utf8').toString('base64url');
+  assert.deepEqual(JSON.parse(JSON.stringify(decode(encoded))), legacy);
+});
+test('video-only share links keep only the YouTube ID and nickname', () => {
+  const getYouTubeVideoId = load('getYouTubeVideoId', 'updateLoadVideoState');
+  const normalizeNickname = load('normalizeNickname', 'fitSegmentsToDuration');
+  const buildAnalysisState = load('buildAnalysisState', 'buildShareFragment', {normalizeNickname});
+  const getSectionCategories = load('getSectionCategories', 'buildAnalysisState');
+  const getInitialSegments = load('getInitialSegments', 'getOverviewHeight');
+  const encodeAnalysisState = load('encodeAnalysisState', 'decodeAnalysisState', {getYouTubeVideoId});
+  const buildShareFragment = load('buildShareFragment', 'layoutSummaryBlocks', {
+    getYouTubeVideoId, getSectionCategories, getInitialSegments, encodeAnalysisState
+  });
+  const colors = ['#d8f36a','#ff986b','#8ab6ff','#ee9fce','#75d5bd','#f3c76a'];
+  const tracks = getSectionCategories().map((name, i) => ({name, color: colors[i]}));
+  for (const videoUrl of [
+    'https://youtu.be/X715EumTGo8',
+    'https://www.youtube.com/watch?v=X715EumTGo8',
+    'https://www.youtube.com/watch?v=X715EumTGo8&t=43s'
+  ]) {
+    const state = buildAnalysisState(videoUrl, 222, tracks, getInitialSegments(), 'Matthias');
+    assert.equal(buildShareFragment(state), 'v=X715EumTGo8&n=Matthias');
+  }
+  const detailed = buildAnalysisState('https://youtu.be/X715EumTGo8', 222, tracks,
+    [...getInitialSegments(), {name: 'Chorus', start: 70, end: 95, track: 3}], 'Matthias');
+  const fragment = buildShareFragment(detailed);
+  assert.match(fragment, /^analysis=/);
+  assert.ok(!fragment.includes('youtube.com') && !fragment.includes('youtu.be'));
+});
+test('video-only fragments restore a validated ID and normalized nickname', () => {
+  const normalizeNickname = load('normalizeNickname', 'fitSegmentsToDuration');
+  const decode = load('decodeVideoShareHash', 'fitSegmentsToDuration', {normalizeNickname});
+  assert.deepEqual(JSON.parse(JSON.stringify(decode('#v=X715EumTGo8&n=Matthias'))), {
+    videoId: 'X715EumTGo8', nickname: 'Matthias'
+  });
+  assert.equal(decode('#v=bad&n=Name'), null);
 });
 test('video visibility toggle updates the panel and accessible button state', () => {
   const setVisible = load('setVideoVisible', 'encodeAnalysisState');
@@ -132,7 +173,7 @@ test('analysis categories use the requested fixed labels', () => {
 test('the special matrix row offers its default and all alternate labels', () => {
   const options = load('getTrackLabelOptions', 'getSectionCategories');
   assert.deepEqual(JSON.parse(JSON.stringify(options())), [
-    'Spezial', 'Bass', 'Gesang', 'Analysebereich', 'Improvisation'
+    'Spezial', 'Bass', 'Gesang', 'Analysefokus', 'Improvisation'
   ]);
 });
 test('overview blocks share a row unless their times overlap', () => {
@@ -289,7 +330,7 @@ test('overview label uses the same typography as Strophe track labels', () => {
   assert.ok(html.includes('.trackname{font-size:11px;color:#d0d1c8'));
 });
 test('assignment Markdown is loaded and its visibility control toggles both ways', async () => {
-  assert.ok(html.includes("loadMarkdownFile(path=>fetch(path),'./sondblox_aufgabe.md'"));
+  assert.ok(html.includes("loadMarkdownFile(path=>fetch(path),'./songblox_aufgabe.md'"));
   assert.match(html, /id="toggleAssignment"[^>]*class="[^"]*feature-toggle[^"]*"[^>]*>Aufgabe ausblenden/);
   assert.ok(html.includes('class="video-toggle feature-toggle" id="videoToggle"'));
   assert.ok(html.includes('.feature-toggle,.transport .feature-toggle{min-height:44px;padding:0 10px;border:1px solid var(--line);border-radius:5px;font-size:12px;white-space:nowrap;background:none;color:#dedfd6}'));
@@ -297,8 +338,8 @@ test('assignment Markdown is loaded and its visibility control toggles both ways
   const loadMarkdownFile = load('loadMarkdownFile', 'loadDescription');
   const target = {textContent: ''};
   let loadedPath = '';
-  await loadMarkdownFile(async path => { loadedPath = path; return {ok: true, text: async () => 'Zeile 1\nZeile 2'}; }, './sondblox_aufgabe.md', target, 'Fallback');
-  assert.equal(loadedPath, './sondblox_aufgabe.md');
+  await loadMarkdownFile(async path => { loadedPath = path; return {ok: true, text: async () => 'Zeile 1\nZeile 2'}; }, './songblox_aufgabe.md', target, 'Fallback');
+  assert.equal(loadedPath, './songblox_aufgabe.md');
   assert.equal(target.textContent, 'Zeile 1\nZeile 2');
   const setVisible = load('setAssignmentVisible', 'getInitialSegments');
   const text = {hidden: false, parentElement: {classes: new Set(), classList: {toggle(name, force) { force ? this.owner.classes.add(name) : this.owner.classes.delete(name); }}}};
@@ -330,7 +371,7 @@ test('description, settings, shortcuts, and author metadata appear in order', ()
     html.indexOf('id="shortDescription"'),
     html.indexOf('Einstellungen'),
     html.indexOf('Tastenkürzel'),
-    html.indexOf('Matthias Krebs · Version 0.1.0 · 30.10.2026'),
+    html.indexOf('Matthias Krebs · Version 0.1.1 · 30.10.2026'),
   ];
   assert.ok(positions.every(position => position >= 0));
   assert.deepEqual(positions, [...positions].sort((a, b) => a - b));
@@ -372,8 +413,8 @@ test('section and description panels use a 40:60 layout and obsolete note is rem
 });
 test('block movement hint sits below the entire matrix editor', () => {
   assert.ok(html.includes('<div class="matrix-note movement-note">Ziehen zum Verschieben, Kanten zum Kürzen</div>'));
-  assert.ok(html.indexOf('<div class="tracks" id="tracks"></div>') < html.indexOf('<div class="matrix-note movement-note">'));
-  assert.ok(html.indexOf('<div class="matrix-note movement-note">') < html.indexOf('<div class="addrow">'));
+  assert.ok(html.includes('<div class="tracks" id="tracks"></div><div class="addrow"><button class="primary" id="add">＋ Abschnitt am Abspielkopf</button><div class="matrix-note movement-note">Ziehen zum Verschieben, Kanten zum Kürzen</div></div>'));
+  assert.ok(html.includes('.addrow .movement-note{width:auto;flex:1;margin:0}'));
   assert.ok(!html.includes('class="matrix-tooltip movement-tooltip"'));
 });
 test('add-section action sits close below the matrix hint', () => {
@@ -394,10 +435,14 @@ test('font size controls sit directly beside their label', () => {
   assert.ok(html.includes('.font-controls .font-label{color:var(--muted);font-size:12px;font-weight:400}'));
 });
 test('author footer links to the project repository on GitHub', () => {
-  const author = html.indexOf('Matthias Krebs · Version 0.1.0 · 30.10.2026');
-  const github = html.indexOf('https://github.com/matzerak/musicflow');
+  const author = html.indexOf('Matthias Krebs · Version 0.1.1 · 30.10.2026');
+  const github = html.indexOf('https://github.com/matzerak/songblox');
   assert.ok(author >= 0 && github > author);
-  assert.match(html.slice(github - 100, github + 160), /href="https:\/\/github\.com\/matzerak\/musicflow"[^>]*>[^<]*GitHub/);
+  assert.match(html.slice(github - 100, github + 160), /href="https:\/\/github\.com\/matzerak\/songblox"[^>]*>[^<]*GitHub/);
+});
+test('head exposes the requested social preview image', () => {
+  const head = html.slice(html.indexOf('<head>'), html.indexOf('</head>'));
+  assert.ok(head.includes('<meta property="og:image" content="https://matzerak.github.io/songblox/songblox0.jpg">'));
 });
 test('application branding consistently uses songblox', () => {
   assert.ok(html.includes('<title>songblox</title>'));
