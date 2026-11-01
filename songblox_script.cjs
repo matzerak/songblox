@@ -471,8 +471,12 @@ test('font control updates page zoom and disables only at its bounds', () => {
   let step = update(1, root, output, down, up);
   assert.equal(step, 1);
   assert.equal(root.style.zoom, '110%');
+  assert.equal(root.style.textSizeAdjust, 'none');
   assert.equal(output.textContent, '110%');
   assert.equal(down.disabled, false);
+  step = update(0, root, output, down, up);
+  assert.equal(root.style.zoom, '100%');
+  assert.equal(root.style.textSizeAdjust, '');
   step = update(20, root, output, down, up);
   assert.equal(step, 10);
   assert.equal(root.style.zoom, '200%');
