@@ -29,6 +29,53 @@ test('resize enforces a minimum one-second segment', () => {
   assert.deepEqual({...update({start: 20, end: 40}, 'start', 50, 100)}, {start: 39, end: 40});
   assert.deepEqual({...update({start: 20, end: 40}, 'end', -50, 100)}, {start: 20, end: 21});
 });
+test('drag preview updates the segment and its visible position before release', () => {
+  const updateSegmentFromDrag = load('updateSegmentFromDrag', 'setVideoVisible');
+  const preview = load('previewSegmentDrag', 'setVideoVisible', {updateSegmentFromDrag});
+  const segment = {start: 20, end: 40};
+  const gesture = {mode: 'move', x: 100, original: {start: 20, end: 40}};
+  const block = {style: {}};
+  preview(segment, gesture, 140, {left: 100, width: 200}, 100, block);
+  assert.deepEqual(segment, {start: 40, end: 60});
+  assert.equal(block.style.left, '40%');
+  assert.equal(block.style.width, '20%');
+});
+test('resize preview updates the visible edge before release', () => {
+  const updateSegmentFromDrag = load('updateSegmentFromDrag', 'setVideoVisible');
+  const preview = load('previewSegmentDrag', 'setVideoVisible', {updateSegmentFromDrag});
+  const segment = {start: 20, end: 40};
+  const gesture = {mode: 'end', x: 100, original: {start: 20, end: 40}};
+  const block = {style: {}};
+  preview(segment, gesture, 140, {left: 100, width: 200}, 100, block);
+  assert.deepEqual(segment, {start: 20, end: 60});
+  assert.equal(block.style.left, '20%');
+  assert.equal(block.style.width, '40%');
+});
+test('drag preview follows a section into the hovered category before release', () => {
+  const updateSegmentFromDrag = load('updateSegmentFromDrag', 'setVideoVisible');
+  const preview = load('previewSegmentDrag', 'setVideoVisible', {updateSegmentFromDrag});
+  const origin = {dataset: {track: '0'}, appendChild(block) { block.parentElement = this; }};
+  const target = {dataset: {track: '2', color: '#8ab6ff'}, appendChild(block) { block.parentElement = this; }};
+  const block = {parentElement: origin, style: {setProperty(name, value) { this[name] = value; }}};
+  const segment = {start: 20, end: 40, track: 0};
+  const gesture = {mode: 'move', x: 100, original: {start: 20, end: 40}};
+  preview(segment, gesture, 120, {left: 100, width: 200}, 100, block, target);
+  assert.equal(block.parentElement, target);
+  assert.equal(segment.track, 2);
+  assert.equal(block.style['--c'], '#8ab6ff');
+});
+test('a short tap on either resize edge nudges that edge out by half a second', () => {
+  const nudge = load('nudgeSegmentEdge', 'setVideoVisible');
+  assert.deepEqual({...nudge({start: 20, end: 40}, 'start', 100)}, {start: 19.5, end: 40});
+  assert.deepEqual({...nudge({start: 20, end: 40}, 'end', 100)}, {start: 20, end: 40.5});
+  assert.deepEqual({...nudge({start: 0, end: 40}, 'start', 100)}, {start: 0, end: 40});
+  assert.deepEqual({...nudge({start: 0, end: 100}, 'end', 100)}, {start: 0, end: 100});
+});
+test('matrix pointer handlers wire live category transfer and short edge taps', () => {
+  assert.ok(script.includes('gesture={index,mode,x:e.clientX,y:e.clientY,track:i,block,original:'));
+  assert.ok(script.includes("targetLane=document.elementFromPoint(e.clientX,e.clientY)?.closest('.lane[data-track]')"));
+  assert.ok(script.includes("if(isTap&&gesture.mode!=='move')Object.assign(segment,nudgeSegmentEdge(segment,gesture.mode,duration))"));
+});
 test('share state round-trips video and Unicode analysis names', () => {
   const getYouTubeVideoId = load('getYouTubeVideoId', 'updateLoadVideoState');
   const encode = load('encodeAnalysisState', 'decodeAnalysisState', {getYouTubeVideoId});
@@ -362,6 +409,31 @@ test('Markdown text regions preserve line breaks', () => {
   assert.ok(html.includes('class="short-description markdown-text" id="shortDescription"'));
   assert.ok(html.includes('class="markdown-text assignment-text" id="assignmentText"'));
 });
+test('resource links appear side by side below the short description and open in new tabs', () => {
+  const descriptionEnd = html.indexOf('</p>', html.indexOf('id="shortDescription"')) + 4;
+  const settingsStart = html.indexOf('<section class="settings-section"', descriptionEnd);
+  const links = html.slice(descriptionEnd, settingsStart);
+  for (const [label, href] of [
+    ['Handbuch', 'songblox_README.pdf'],
+    ['DEMO-Projekt', 'songblox_DEMO.html'],
+    ['Handout', 'songblox_handout.pdf'],
+  ]) {
+    assert.ok(links.includes(`<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`));
+  }
+  assert.ok(links.indexOf('Handbuch') < links.indexOf('DEMO-Projekt'));
+  assert.ok(links.indexOf('DEMO-Projekt') < links.indexOf('Handout'));
+  assert.ok(html.includes('.resource-links{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}'));
+  assert.ok(fs.existsSync('/workspace/songblox_README.pdf'));
+  assert.ok(fs.existsSync('/workspace/songblox_handout.pdf'));
+});
+test('DEMO page redirects to the exact shared project analysis', () => {
+  const demoUrl = 'https://matzerak.github.io/songblox/#analysis=WzIsIlg3MTVFdW1UR284IiwxOTIsIk1hdHRoaWFzIixbWyJJbnRyby9PdXRybyIsIiNkOGYzNmEiXSxbIlN0cm9waGUiLCIjZmY5ODZiIl0sWyJQcmUtQ2hvcnVzIiwiIzhhYjZmZiJdLFsiQ2hvcnVzIiwiI2VlOWZjZSJdLFsiQnJpZGdlIiwiIzc1ZDViZCJdLFsiQW5hbHlzZWJlcmVpY2giLCIjZjNjNzZhIl1dLFtbIkludHJvIiwxLDExLDBdLFsiU3Ryb3BoZSAxIiwzMCw1MCwyXSxbIkludHJvL091dHJvIiwxMC45MjQ4MTczNzA1MTc1NzgsMjkuOTI0ODE3MzcwNTE3NTgsMV0sWyJQcmUtQ2hvcnVzIiw0OS40NjA3NTQyODg3MjUyMiw1OS40NjA3NTQyODg3MjUyMSwzXSxbIkludHJvL091dHJvIiw1OSw2OSwwXSxbIkludHJvL091dHJvIiw2OC4zMzQ0MTY3MjY1MjA3Niw4Ny4zMzQ0MTY3MjY1MjA3NiwxXSxbIlN0cm9waGUiLDg3LjQxMDExMDA2MTUwMTU4LDEwNy40MTAxMTAwNjE1MDE1OCwyXSxbIlN0cm9waGUiLDEwNi43NTUxOTQ3NTAyODExMywxMjUuNzU1MTk0NzUwMjgxMTMsM10sWyJTdHJvcGhlIiwxMjUuODkxMDkwNTIyMzA5OTQsMTM1Ljg5MTA5MDUyMjMwOTkyLDBdLFsiU3Ryb3BoZSIsMTM1LjU2MTY5NzQ4NjIxNzMsMTU0LjU2MTY5NzQ4NjIxNzMsMl0sWyJDaG9ydXMiLDE1NC42NzQyNDU5MjAyMjA0NywxNzQuNjc0MjQ1OTIwMjIwNDcsM10sWyJDaG9ydXMiLDE3NC44MTA1MTM5ODY4NTMwNCwxODcuMjEzNSwwXSxbIkFuYWx5c2ViZXJlaWNoIiw1OSwxMzYsNV1dXQ';
+  const demo = fs.readFileSync('/workspace/songblox_DEMO.html', 'utf8');
+  assert.equal(demo.match(/const demoUrl = '([^']+)'/)[1], demoUrl);
+  assert.ok(demo.includes(`content="0;url=${demoUrl}"`));
+  assert.ok(demo.includes(`href="${demoUrl}"`));
+  assert.ok(demo.includes('window.location.replace(demoUrl)'));
+});
 test('description, settings, shortcuts, and author metadata appear in order', () => {
   const description = 'Diese Webanwendung ermöglicht das Untersuchen von Musikvideos, die auf YouTube verfügbar sind: Abschnitte erkennen, miteinander vergleichen, Unterschiede beschreiben und ihre Bedeutung für den musikalischen Verlauf verstehen.';
   const markdown = fs.readFileSync('/workspace/songblox_kurzbeschreibung.md', 'utf8').trim();
@@ -371,10 +443,11 @@ test('description, settings, shortcuts, and author metadata appear in order', ()
     html.indexOf('id="shortDescription"'),
     html.indexOf('Einstellungen'),
     html.indexOf('Tastenkürzel'),
-    html.indexOf('Matthias Krebs · Version 0.1.1 · 30.10.2026'),
+    html.indexOf('Matthias Krebs · Version 0.1.2 · 01.11.2026'),
   ];
   assert.ok(positions.every(position => position >= 0));
   assert.deepEqual(positions, [...positions].sort((a, b) => a - b));
+  assert.ok(!html.includes('Version 0.1.1 · 30.10.2026'));
   assert.ok(html.includes("loadMarkdownFile(fetchMarkdown,'./songblox_kurzbeschreibung.md'"));
   assert.ok(html.includes("loadDescription(path=>fetch(path)"));
 });
@@ -435,7 +508,7 @@ test('font size controls sit directly beside their label', () => {
   assert.ok(html.includes('.font-controls .font-label{color:var(--muted);font-size:12px;font-weight:400}'));
 });
 test('author footer links to the project repository on GitHub', () => {
-  const author = html.indexOf('Matthias Krebs · Version 0.1.1 · 30.10.2026');
+  const author = html.indexOf('Matthias Krebs · Version 0.1.2 · 01.11.2026');
   const github = html.indexOf('https://github.com/matzerak/songblox');
   assert.ok(author >= 0 && github > author);
   assert.match(html.slice(github - 100, github + 160), /href="https:\/\/github\.com\/matzerak\/songblox"[^>]*>[^<]*GitHub/);
