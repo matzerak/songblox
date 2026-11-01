@@ -460,18 +460,22 @@ test('description loader falls back when the Markdown file cannot be fetched', a
   await loadDescription(async () => { throw new Error('offline'); }, target, 'Fallback');
   assert.equal(target.textContent, 'Fallback');
 });
-test('font control updates page zoom and disables only at its bounds', () => {
+test('published index uses the same font scaling implementation as the source page', () => {
+  const publishedHtml = fs.readFileSync('/workspace/index.html', 'utf8');
+  assert.equal(publishedHtml, html);
+});
+test('font control scales page zoom without overriding browser text adjustment', () => {
   const clamp = load('clampFontStep', 'fontScaleForStep');
   const scale = load('fontScaleForStep', 'getInitialSegments', {clampFontStep: clamp});
   const update = load('updateFontScale', 'loadDescription', {clampFontStep: clamp, fontScaleForStep: scale});
-  const root = {style: {}};
+  const root = {style: {textSizeAdjust: ''}};
   const output = {textContent: ''};
   const down = {disabled: false};
   const up = {disabled: false};
   let step = update(1, root, output, down, up);
   assert.equal(step, 1);
   assert.equal(root.style.zoom, '110%');
-  assert.equal(root.style.textSizeAdjust, 'none');
+  assert.equal(root.style.textSizeAdjust, '');
   assert.equal(output.textContent, '110%');
   assert.equal(down.disabled, false);
   step = update(0, root, output, down, up);
